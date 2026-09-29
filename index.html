@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeverMissACall — AI receptionist, set up and maintained for you</title>
+<meta name="description" content="I set up and maintain an AI receptionist for your business. It answers every call, books the job, and never invents a price. You keep working.">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B2545;
+    --navy-2: #123B6F;
+    --navy-3: #0E2E58;
+    --ink: #16273F;
+    --muted: #55657C;
+    --amber: #F5A623;
+    --amber-deep: #C6790E;
+    --amber-tint: #FFF2D9;
+    --paper: #FFFFFF;
+    --mist: #F3F6FA;
+    --line: #DDE4EE;
+    --head: "Fraunces", Georgia, serif;
+    --body: "Figtree", "Segoe UI", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { max-width: 100%; display: block; }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+  .wrap { width: min(1120px, 100% - 40px); margin-inline: auto; }
+
+  /* ---------- scroll reveal ---------- */
+  .rv { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+  .rv.in { opacity: 1; transform: none; }
+  .rv.d1 { transition-delay: .08s; } .rv.d2 { transition-delay: .16s; }
+  .rv.d3 { transition-delay: .24s; } .rv.d4 { transition-delay: .32s; }
+  @media (prefers-reduced-motion: reduce) {
+    .rv { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+    .typed-cursor { animation: none !important; }
+  }
+
+  /* ---------- header ---------- */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(11,37,69,.82);
+    backdrop-filter: saturate(160%) blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand img { height: 34px; width: auto; filter: brightness(0) invert(1); }
+  .barlinks { display: flex; align-items: center; gap: 26px; }
+  .barlinks a { color: #C6D3E6; text-decoration: none; font-weight: 600; font-size: 14.5px; transition: color .2s; }
+  .barlinks a:hover { color: #fff; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--body); font-weight: 700; font-size: 15.5px;
+    text-decoration: none; padding: 12px 22px; border-radius: 10px;
+    border: 2px solid var(--amber); background: var(--amber); color: var(--navy);
+    cursor: pointer; transition: transform .15s ease, box-shadow .15s ease, background .15s;
+  }
+  .btn:hover { background: #ffb941; border-color: #ffb941; transform: translateY(-2px); box-shadow: 0 8px 22px rgba(245,166,35,.35); }
+  .btn.ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
+  .btn.ghost:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.7); box-shadow: none; }
+  .btn.small { padding: 9px 18px; font-size: 14px; }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative; overflow: hidden; color: #fff;
+    background:
+      radial-gradient(1000px 500px at 85% -20%, #1B4A8C 0%, rgba(27,74,140,0) 55%),
+      radial-gradient(700px 400px at -10% 110%, #123B6F 0%, rgba(18,59,111,0) 60%),
+      linear-gradient(180deg, var(--navy) 0%, var(--navy-3) 100%);
+    padding: 90px 0 100px;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    mask-image: linear-gradient(180deg, black, transparent 85%);
+  }
+  .hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--amber); margin-bottom: 18px;
+    padding: 7px 14px; border: 1px solid rgba(245,166,35,.35); border-radius: 999px;
+    background: rgba(245,166,35,.08);
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(245,166,35,.5);} 50% { box-shadow: 0 0 0 7px rgba(245,166,35,0);} }
+  h1 {
+    font-family: var(--head); font-weight: 600;
+    font-size: clamp(38px, 5.2vw, 62px);
+    line-height: 1.05; letter-spacing: -0.015em; margin-bottom: 22px;
+  }
+  h1 em { font-style: italic; color: var(--amber); font-weight: 500; }
+  .lede { font-size: 19px; color: #C9D6E8; max-width: 32em; margin-bottom: 32px; }
+  .lede strong { color: #fff; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 34px; }
+  .proof { display: flex; flex-wrap: wrap; gap: 10px 26px; font-size: 14px; color: #9FB0C9; }
+  .proof span { display: inline-flex; align-items: center; gap: 7px; }
+  .proof svg { width: 15px; height: 15px; flex: none; }
+
+  /* live call card */
+  .callcard {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,.35);
+    backdrop-filter: blur(8px);
+  }
+  .callcard .top {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,.1);
+    font-size: 13px; font-weight: 600; color: #A9BAD6;
+  }
+  .callcard .top .live { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--amber); font-size: 12px; letter-spacing: .08em; }
+  .callcard .top .live i { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); animation: pulse 1.6s infinite; font-style: normal; }
+  .transcript { padding: 20px 20px 8px; min-height: 300px; font-size: 15.5px; line-height: 1.55; }
+  .tline { margin-bottom: 14px; opacity: 0; transform: translateY(8px); transition: opacity .4s, transform .4s; }
+  .tline.show { opacity: 1; transform: none; }
+  .tline .who { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+  .tline.ai .who { color: var(--amber); }
+  .tline.caller .who { color: #8FA3C0; }
+  .tline.ai .msg { color: #F2F6FC; }
+  .tline.caller .msg { color: #B9C7DC; }
+  .tline .msg strong { color: var(--amber); font-weight: 700; }
+  .callcard .bottom { padding: 12px 18px 16px; border-top: 1px solid rgba(255,255,255,.1); font-size: 13px; color: #8FA3C0; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .callcard .bottom .booked { color: #7BD88F; font-weight: 600; }
+  .typed-cursor { display: inline-block; width: 8px; background: var(--amber); animation: blink 1s step-end infinite; color: transparent; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ---------- sections ---------- */
+  section { padding: 88px 0; }
+  .kicker { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--amber-deep); margin-bottom: 12px; }
+  h2.title { font-family: var(--head); font-weight: 600; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.12; letter-spacing: -0.01em; color: var(--navy); margin-bottom: 14px; }
+  .sub { color: var(--muted); max-width: 40em; margin-bottom: 44px; font-size: 18px; }
+
+  /* bento */
+  .bento { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .cell {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
+    padding: 26px 24px; position: relative; overflow: hidden;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s;
+  }
+  .cell:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(11,37,69,.1); border-color: #C7D3E4; }
+  .cell.wide { grid-column: span 2; }
+  .cell .num { font-family: var(--head); font-size: 15px; font-weight: 700; color: var(--amber-deep); margin-bottom: 14px; }
+  .cell h3 { font-family: var(--head); font-weight: 600; font-size: 21px; color: var(--navy); margin-bottom: 8px; }
+  .cell p { color: var(--muted); font-size: 15.5px; margin: 0; }
+  .cell .ico { width: 44px; height: 44px; border-radius: 12px; background: var(--amber-tint); display: grid; place-items: center; margin-bottom: 16px; }
+  .cell .ico svg { width: 22px; height: 22px; }
+  .cell.accent { background: linear-gradient(150deg, var(--navy) 0%, var(--navy-3) 100%); border-color: var(--navy); }
+  .cell.accent h3 { color: #fff; }
+  .cell.accent p { color: #B9C7DC; }
+  .cell.accent .num { color: var(--amber); }
+  .cell.accent .ico { background: rgba(245,166,35,.15); }
+
+  /* maintenance strip */
+  .maint { background: var(--mist); }
+  .maint .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .checklist { display: grid; gap: 12px; }
+  .check {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px;
+  }
+  .check svg { width: 22px; height: 22px; flex: none; margin-top: 2px; }
+  .check b { display: block; color: var(--navy); font-size: 15.5px; }
+  .check span { color: var(--muted); font-size: 14.5px; }
+
+  /* demo */
+  .demo { background: var(--navy); color: #fff; position: relative; overflow: hidden; }
+  .demo::before { content:""; position:absolute; inset:0; background: radial-gradient(800px 400px at 90% 0%, rgba(245,166,35,.12), transparent 60%); }
+  .demo .wrap { position: relative; }
+  .demo h2.title { color: #fff; }
+  .demo .sub { color: #B9C7DC; }
+  .videoframe {
+    width: min(860px, 100%); margin-inline: auto; aspect-ratio: 16/9;
+    border-radius: 18px; overflow: hidden; position: relative;
+    background: #0F3160; border: 1px solid #2A4C7E;
+    display: grid; place-items: center; text-align: center; padding: 30px;
+  }
+  .videoframe iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .videoframe .placeholder { color: #9FB0C9; max-width: 30em; }
+  .videoframe .placeholder b { color: #fff; display: block; font-size: 19px; margin-bottom: 8px; font-family: var(--head); font-weight: 600; }
+  .playbtn {
+    width: 74px; height: 74px; border-radius: 50%; margin: 0 auto 18px;
+    background: var(--amber); display: grid; place-items: center;
+    box-shadow: 0 0 0 0 rgba(245,166,35,.4); animation: pulse 2.4s infinite;
+  }
+  .playbtn svg { width: 28px; height: 28px; margin-left: 4px; }
+
+  /* fit */
+  .fit ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .fit li {
+    border: 1px solid var(--line); padding: 11px 20px; border-radius: 999px;
+    font-weight: 600; font-size: 15px; background: var(--paper);
+    transition: all .2s; cursor: default;
+  }
+  .fit li:hover { background: var(--navy); color: #fff; border-color: var(--navy); transform: translateY(-2px); }
+
+  /* about */
+  .about .grid { display: grid; grid-template-columns: 220px 1fr; gap: 44px; align-items: center; }
+  .photo {
+    width: 220px; height: 220px; border-radius: 24px; overflow: hidden; position: relative;
+    background: linear-gradient(150deg, var(--navy), var(--navy-3)); color: #fff;
+    display: grid; place-items: center; font-family: var(--head); font-weight: 600; font-size: 64px;
+    border: 1px solid var(--line); box-shadow: 0 20px 40px rgba(11,37,69,.15);
+  }
+  .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .about p { margin: 0 0 14px; max-width: 42em; color: var(--muted); }
+  .about p b { color: var(--ink); }
+
+  /* reach */
+  .reach { background: var(--mist); }
+  .channels { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .channel {
+    display: flex; align-items: center; gap: 14px; text-decoration: none;
+    background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px;
+    transition: all .2s; position: relative;
+  }
+  .channel:hover { border-color: var(--navy); transform: translateY(-3px); box-shadow: 0 10px 26px rgba(11,37,69,.1); }
+  .channel .ico { width: 44px; height: 44px; border-radius: 12px; background: var(--amber-tint); display: grid; place-items: center; flex: none; }
+  .channel .ico svg { width: 21px; height: 21px; }
+  .channel .label { font-weight: 700; font-size: 15px; color: var(--ink); }
+  .channel .value { font-size: 13.5px; color: var(--muted); word-break: break-all; }
+  .channel.primary { border: 2px solid var(--amber); background: linear-gradient(150deg, #FFF9EE, #fff); }
+  .channel.primary .badge { position: absolute; top: -11px; right: 14px; background: var(--amber); color: var(--navy); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; letter-spacing: .05em; }
+  .channel.soon { opacity: .55; }
+  .channel.soon:hover { transform: none; box-shadow: none; border-color: var(--line); cursor: default; }
+  .channel.soon .soon-tag { font-size: 11px; font-weight: 700; color: var(--amber-deep); background: var(--amber-tint); padding: 2px 9px; border-radius: 999px; margin-left: auto; flex: none; }
+
+  /* cta */
+  .cta { text-align: center; background: linear-gradient(180deg, var(--paper), var(--mist)); }
+  .cta p { color: var(--muted); max-width: 36em; margin: 0 auto 28px; }
+  .cta .btn { font-size: 17px; padding: 16px 30px; }
+
+  footer { padding: 32px 0; border-top: 1px solid var(--line); font-size: 14.5px; color: var(--muted); background: var(--mist); }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; align-items: center; }
+
+  @media (max-width: 960px) {
+    .hero .wrap { grid-template-columns: 1fr; gap: 40px; }
+    .bento { grid-template-columns: 1fr 1fr; }
+    .cell.wide { grid-column: span 2; }
+    .maint .grid { grid-template-columns: 1fr; }
+    .about .grid { grid-template-columns: 1fr; }
+    .photo { width: 160px; height: 160px; font-size: 46px; }
+  }
+  @media (max-width: 620px) {
+    body { font-size: 16px; }
+    .hero { padding: 56px 0 64px; }
+    section { padding: 60px 0; }
+    .barlinks a:not(.btn) { display: none; }
+    .bento { grid-template-columns: 1fr; }
+    .cell.wide { grid-column: span 1; }
+    .transcript { min-height: 340px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#top" aria-label="NeverMissACall home">
+      <img src="logo.png" alt="NeverMissACall">
+    </a>
+    <nav class="barlinks">
+      <a href="#how">How it works</a>
+      <a href="#maint">Maintenance</a>
+      <a href="#demo">Demo</a>
+      <a href="#about">About</a>
+      <a class="btn small" href="#reach">Get a demo</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow rv"><span class="dot"></span> AI receptionist · set up &amp; maintained for you</p>
+        <h1 class="rv d1">Every missed call is a job for your <em>competitor.</em></h1>
+        <p class="lede rv d2">I build and run your AI receptionist end to end. It answers every call, books the job, and <strong>never invents a price</strong> — while you stay on the tools. You never touch the software.</p>
+        <div class="actions rv d3">
+          <a class="btn" href="#demo">Hear a demo call</a>
+          <a class="btn ghost" href="#reach">Talk to Musa</a>
+        </div>
+        <div class="proof rv d4">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Evenings &amp; weekends covered</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> No price-guessing — ever</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> I maintain it monthly</span>
+        </div>
+      </div>
+
+      <!-- live typing call demo -->
+      <div class="callcard rv d3" aria-label="Live example of the AI receptionist handling a call">
+        <div class="top">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A9BAD6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Incoming call · +1 (555) 014-2288
+          <span class="live"><i></i>LIVE</span>
+        </div>
+        <div class="transcript" id="transcript" aria-live="polite"></div>
+        <div class="bottom">
+          <span>Illustrative demo · home remodeling co.</span>
+          <span class="booked" id="bookingStatus" style="opacity:0">✓ Job booked · Thursday 10 AM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HOW IT WORKS / BENTO ============ -->
+  <section id="how">
+    <div class="wrap">
+      <p class="kicker rv">How it works</p>
+      <h2 class="title rv d1">Four things happen. You do none of them.</h2>
+      <p class="sub rv d2">You don't touch any software. I set it up around your business, test it against the questions your customers actually ask, and keep it accurate.</p>
+      <div class="bento">
+        <div class="cell rv">
+          <p class="num">01</p>
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <h3>It answers</h3>
+          <p>Every call picked up in three rings — evenings, weekends, and when your line is busy.</p>
+        </div>
+        <div class="cell rv d1">
+          <p class="num">02</p>
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <h3>It helps</h3>
+          <p>Answers questions on your services, hours and area — using only what you've approved.</p>
+        </div>
+        <div class="cell rv d2">
+          <p class="num">03</p>
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg></div>
+          <h3>It books</h3>
+          <p>Name, number, project and preferred time — collected and texted to you to confirm.</p>
+        </div>
+        <div class="cell accent rv d3">
+          <p class="num">04</p>
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3>I keep it honest</h3>
+          <p>Monthly, I update your hours, services and calendar — so it never guesses or hallucinates. That's the part you can't DIY.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MAINTENANCE ============ -->
+  <section class="maint" id="maint">
+    <div class="wrap">
+      <div class="grid">
+        <div>
+          <p class="kicker rv">The part nobody else does</p>
+          <h2 class="title rv d1">An AI left alone will happily invent a price.</h2>
+          <p class="sub rv d2" style="margin-bottom:0;">Left unsupervised, any AI receptionist will eventually guess a price, promise a policy you don't offer, or double-book a Thursday. I write the rules, test them, and go back in when something changes — so the answer is always <b>your</b> answer.</p>
+        </div>
+        <div class="checklist">
+          <div class="check rv">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            <div><b>Guardrails, written &amp; tested</b><span>It says "let me have someone call you back" instead of making things up. I test it against the questions your customers actually ask.</span></div>
+          </div>
+          <div class="check rv d1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+            <div><b>Calendar &amp; hours, kept current</b><span>Your availability, holidays and new services updated as they change — so bookings land in real slots.</span></div>
+          </div>
+          <div class="check rv d2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
+            <div><b>Tuned over time</b><span>When a question trips it up, I'm the one who fixes it. You never learn the platform.</span></div>
+          </div>
+          <div class="check rv d3">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M20 4 4 20"/></svg>
+            <div><b>Honest fit check</b><span>If an AI receptionist isn't right for your business, I'll tell you before you pay anything.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="demo" id="demo">
+    <div class="wrap">
+      <p class="kicker rv" style="color:var(--amber)">Hear it for yourself</p>
+      <h2 class="title rv d1">A real call, handled end to end</h2>
+      <p class="sub rv d2">A demo built for a home remodeling company. It answers questions, declines to quote a price, and books a consultation.</p>
+      <div class="videoframe rv d3">
+        <!--
+          AFTER YOU UPLOAD THE DEMO TO YOUTUBE (unlisted), replace the placeholder div below with:
+          <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" title="NeverMissACall demo" allowfullscreen></iframe>
+        -->
+        <div class="placeholder">
+          <div class="playbtn"><svg viewBox="0 0 24 24" fill="#0B2545"><path d="M8 5v14l11-7z"/></svg></div>
+          <b>Demo video — coming soon</b>
+          Upload your recorded demo call to YouTube as unlisted, then paste the embed code where the comment in the HTML shows you. This frame is already sized and styled for it.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FIT ============ -->
+  <section class="fit">
+    <div class="wrap">
+      <p class="kicker rv">Who this is for</p>
+      <h2 class="title rv d1">Built for businesses where a missed call is a missed job</h2>
+      <p class="sub rv d2">Trades and appointment-based businesses — small teams who are busy doing the actual work when the phone rings.</p>
+      <ul class="rv d3">
+        <li>Remodelers &amp; contractors</li>
+        <li>Plumbing &amp; HVAC</li>
+        <li>Electricians</li>
+        <li>Roofing</li>
+        <li>Salons &amp; spas</li>
+        <li>Clinics &amp; dental</li>
+        <li>Auto repair</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="grid">
+        <div class="photo rv" aria-hidden="true">
+          MS
+          <img src="musa.jpg" alt="" onerror="this.remove()">
+        </div>
+        <div>
+          <p class="kicker rv">The person behind it</p>
+          <h2 class="title rv d1">Hi, I'm Musa.</h2>
+          <p class="rv d2">I'm <b>Musa Siongo</b>, based in Nairobi, Kenya, with an engineering and AI background. I work with small businesses to set up AI receptionists that fit how they already operate — not the other way round.</p>
+          <p class="rv d3">I handle the technical setup, connect your phone line, test the agent against real customer questions, and keep improving it after it goes live. You get the benefit of an AI receptionist without learning a new platform. If it isn't a good fit for your business, I'll say so.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REACH ============ -->
+  <section class="reach" id="reach">
+    <div class="wrap">
+      <p class="kicker rv">Get in touch</p>
+      <h2 class="title rv d1">Reach me wherever's easiest</h2>
+      <p class="sub rv d2">Send your business name and website, and I'll set up a short demo using your own details — no obligation.</p>
+      <div class="channels">
+        <a class="channel primary rv" href="mailto:musa.nevermissacall@gmail.com?subject=Demo%20for%20my%20business&body=Hi%20Musa%2C%0A%0ABusiness%20name%3A%20%0AWebsite%3A%20%0AWhat%20does%20the%20phone%20ring%20about%20most%3A%20">
+          <span class="badge">FASTEST</span>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></span>
+          <span><span class="label">Email</span><br><span class="value">musa.nevermissacall@gmail.com</span></span>
+        </a>
+        <!-- TODO: replace 254XXXXXXXXX with your WhatsApp Business number (no plus, no spaces) and remove class "soon" + the soon-tag span -->
+        <div class="channel soon rv d1">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+          <span><span class="label">WhatsApp</span><br><span class="value">Business line coming soon</span></span>
+          <span class="soon-tag">SOON</span>
+        </div>
+        <!-- TODO: swap in a real number, e.g. tel:+254700000000, and remove class "soon" -->
+        <div class="channel soon rv d2">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+          <span><span class="label">Call</span><br><span class="value">Coming soon</span></span>
+          <span class="soon-tag">SOON</span>
+        </div>
+        <!-- TODO: replace with your real Facebook Page URL and remove class "soon" -->
+        <div class="channel soon rv d3">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#C6790E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></span>
+          <span><span class="label">Facebook</span><br><span class="value">Page coming soon</span></span>
+          <span class="soon-tag">SOON</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta">
+    <div class="wrap">
+      <h2 class="title rv">Want to hear it answer for <em style="color:var(--amber-deep); font-style:italic;">your</em> business?</h2>
+      <p class="rv d1">Send your business name and website. I'll set up a short demo using your own details so you can hear exactly how it would handle your calls.</p>
+      <a class="btn rv d2" href="mailto:musa.nevermissacall@gmail.com?subject=Demo%20for%20my%20business&body=Hi%20Musa%2C%0A%0ABusiness%20name%3A%20%0AWebsite%3A%20%0AWhat%20does%20the%20phone%20ring%20about%20most%3A%20">Email musa.nevermissacall@gmail.com</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>NeverMissACall · Nairobi, Kenya</span>
+    <span>Never miss a call. Never lose the job.</span>
+  </div>
+</footer>
+
+<script>
+/* ---------- scroll reveal ---------- */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+/* ---------- hero live-call typing demo ---------- */
+const script = [
+  { who: 'ai',     name: 'AI receptionist', msg: 'Thanks for calling Lakeside Remodeling — this is their assistant. How can I help you today?' },
+  { who: 'caller', name: 'Caller',          msg: "Hi, I need a quote for a kitchen remodel. What's your rough price range?" },
+  { who: 'ai',     name: 'AI receptionist', msg: 'Happy to help with that. Pricing depends on the scope, so I\'d rather have our team give you an accurate figure than guess. Can I book you a free consultation?' },
+  { who: 'caller', name: 'Caller',          msg: 'Sure — do you have anything Thursday morning?' },
+  { who: 'ai',     name: 'AI receptionist', msg: 'Thursday at <strong>10 AM</strong> is open. Can I take your name and number, and a note about the project?' },
+  { who: 'caller', name: 'Caller',          msg: 'David Chen, 555-014-2288. Just the kitchen — cabinets, counters, maybe the floor.' },
+  { who: 'ai',     name: 'AI receptionist', msg: 'Booked, David. Our team will confirm by text shortly. Anything else I can help with?' },
+];
+
+const box = document.getElementById('transcript');
+const statusEl = document.getElementById('bookingStatus');
+let started = false;
+
+function typeLine(i) {
+  if (i >= script.length) {
+    setTimeout(() => { statusEl.style.transition = 'opacity .6s'; statusEl.style.opacity = 1; }, 500);
+    return;
+  }
+  const line = script[i];
+  const div = document.createElement('div');
+  div.className = 'tline ' + line.who;
+  div.innerHTML = '<div class="who">' + line.name + '</div><div class="msg"></div>';
+  box.appendChild(div);
+  requestAnimationFrame(() => div.classList.add('show'));
+
+  const msgEl = div.querySelector('.msg');
+  const plain = line.msg.replace(/<[^>]+>/g, '');
+  let c = 0;
+  const cursor = '<span class="typed-cursor">.</span>';
+
+  (function tick() {
+    c++;
+    msgEl.innerHTML = plain.slice(0, c) + (c < plain.length ? cursor : '');
+    if (c < plain.length) {
+      setTimeout(tick, 16 + Math.random() * 26);
+    } else {
+      msgEl.innerHTML = line.msg; // restore bold markup
+      setTimeout(() => typeLine(i + 1), line.who === 'ai' ? 550 : 750);
+    }
+  })();
+}
+
+const card = document.querySelector('.callcard');
+const cardIO = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting && !started) {
+    started = true;
+    setTimeout(() => typeLine(0), 600);
+    cardIO.disconnect();
+  }
+}, { threshold: 0.35 });
+cardIO.observe(card);
+</script>
+
+</body>
+</html>
